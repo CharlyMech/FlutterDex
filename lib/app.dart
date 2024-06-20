@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterdex/cubits/connection/has_connection_cubit.dart';
 import 'package:flutterdex/cubits/connection/has_connection_state.dart';
+import 'package:flutterdex/screens/error.dart';
 import 'package:rive/rive.dart';
 
 class App extends StatefulWidget {
@@ -27,13 +28,13 @@ class _AppState extends State<App> {
           home: Scaffold(
             body: RiveAnimation.asset(
               'assets/splash/loading_splash.riv',
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
         );
       }
       if (state is IsConnected) {
-        return MaterialApp(
+        return const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             body: Center(
@@ -43,25 +44,13 @@ class _AppState extends State<App> {
         );
       }
       if (state is IsNotConnected) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            backgroundColor: Colors.yellow[400],
-            body: Center(
-              child: Text("NOT CONNECTED"),
-            ),
-          ),
-        );
+        return const MaterialApp(
+            debugShowCheckedModeBanner: false, home: ErrorScreen(message: ""));
       }
 
-      return MaterialApp(
-        home: Scaffold(
-          backgroundColor: Colors.red[400],
-          body: Center(
-            child: Text("ERROR"),
-          ),
-        ),
-      );
+      return const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: ErrorScreen(message: "TESTING THINGS OUT"));
     });
   }
 }
