@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterdex/cubits/connection/has_connection_cubit.dart';
 import 'package:flutterdex/cubits/connection/has_connection_state.dart';
 import 'package:flutterdex/screens/error.dart';
-import 'package:rive/rive.dart';
+import 'package:flutterdex/screens/home.dart';
+import 'package:flutterdex/screens/splash_screen.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -20,37 +21,19 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HasConnectionCubit, HasConnectionState>(
-        builder: (context, state) {
-      if (state is HasConnectionConnecting) {
-        return const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: RiveAnimation.asset(
-              'assets/splash/loading_splash.riv',
-              fit: BoxFit.fill,
-            ),
-          ),
-        );
-      }
-      if (state is IsConnected) {
-        return const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: Center(
-              child: Text("HOMEE"),
-            ),
-          ),
-        );
-      }
-      if (state is IsNotConnected) {
-        return const MaterialApp(
-            debugShowCheckedModeBanner: false, home: ErrorScreen(message: ""));
-      }
-
-      return const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: ErrorScreen(message: "TESTING THINGS OUT"));
-    });
+    return MaterialApp(
+        title: "FlutterDex",
+        home: BlocBuilder<HasConnectionCubit, HasConnectionState>(
+            builder: (context, state) {
+          return switch (state) {
+            HasConnectionConnecting() => const SplashScreen(),
+            IsConnected() => Home(),
+            IsNotConnected() => const ErrorScreen(
+                message: "Device has no internet connection",
+              ),
+            _ => const ErrorScreen(
+                message: "Some error occurred\nPlease try later")
+          };
+        }));
   }
 }
