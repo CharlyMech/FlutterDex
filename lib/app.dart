@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterdex/cubits/connection/has_connection_cubit.dart';
 import 'package:flutterdex/cubits/connection/has_connection_state.dart';
 import 'package:flutterdex/cubits/navigation/navigation_cubit.dart';
-import 'package:flutterdex/layout/main_layout.dart';
+import 'package:flutterdex/layouts/main_layout.dart';
+import 'package:flutterdex/repositories/navigation_repository.dart';
 import 'package:flutterdex/screens/error.dart';
 import 'package:flutterdex/screens/splash_screen.dart';
 
@@ -20,7 +21,8 @@ class App extends StatelessWidget {
           return switch (state) {
             HasConnectionConnecting() => const SplashScreen(),
             IsConnected() => BlocProvider(
-                create: (context) => NavigationCubit(),
+                create: (context) =>
+                    NavigationCubit(NavigationRepository())..fetchInitialData(),
                 lazy: false,
                 child: MainLayout()),
             IsNotConnected() => const ErrorScreen(
