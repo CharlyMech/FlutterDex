@@ -13,7 +13,7 @@ class PokedexAppBar extends StatelessWidget {
       ),
       Image.asset(
         'assets/public/flutterdex_title.png',
-        width: MediaQuery.of(context).size.width / 1.5,
+        width: 250,
       ),
     ]);
   }
