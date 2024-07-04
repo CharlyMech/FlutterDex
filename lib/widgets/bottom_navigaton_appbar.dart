@@ -22,23 +22,23 @@ class _PokedexBottomAppBarState extends State<PokedexBottomAppBar> {
   @override
   void initState() {
     super.initState();
-    rootBundle.load('assets/rive/generations_navicon.riv').then(
-      (data) async {
-        try {
-          final file = RiveFile.import(data);
-          final artboard = file.mainArtboard;
-          var controller =
-              StateMachineController.fromArtboard(artboard, 'generationsSM');
-          if (controller != null) {
-            artboard.addController(controller);
-            touchGenerations = controller.findSMI('touch');
-          }
-          setState(() => generations = artboard);
-        } catch (e) {
-          print(e);
-        }
-      },
-    );
+    // rootBundle.load('assets/rive/generations_navicon.riv').then(
+    //   (data) async {
+    //     try {
+    //       final file = RiveFile.import(data);
+    //       final artboard = file.mainArtboard;
+    //       var controller =
+    //           StateMachineController.fromArtboard(artboard, 'generationsSM');
+    //       if (controller != null) {
+    //         artboard.addController(controller);
+    //         touchGenerations = controller.findSMI('touch');
+    //       }
+    //       setState(() => generations = artboard);
+    //     } catch (e) {
+    //       print(e);
+    //     }
+    //   },
+    // );
   }
 
   @override
@@ -53,41 +53,41 @@ class _PokedexBottomAppBarState extends State<PokedexBottomAppBar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              height: bottomNavBarHeight,
-              width: bottomNavBarHeight,
-              child: InkWell(
-                  onTap: () {
-                    touchGenerations!.fire();
-                  },
-                  child: RiveAnimation.asset(
-                    'assets/rive/generations_navicon.riv',
-                  )),
-            ),
-            SizedBox(
-              height: bottomNavBarHeight,
-              width: bottomNavBarHeight,
-              // onTap: () => touchGenerations!.value = true,
-              child: RiveAnimation.asset(
-                'assets/rive/regions_navicon.riv',
-              ),
-            ),
-            SizedBox(
-              height: bottomNavBarHeight,
-              width: bottomNavBarHeight,
-              // onTap: () => touchGenerations!.value = true,
-              child: RiveAnimation.asset(
-                'assets/rive/items_navicon.riv',
-              ),
-            ),
-            SizedBox(
-              height: bottomNavBarHeight,
-              width: bottomNavBarHeight,
-              // onTap: () => touchGenerations!.value = true,
-              child: RiveAnimation.asset(
-                'assets/rive/menu_navicon.riv',
-              ),
-            ),
+            // SizedBox(
+            //   height: bottomNavBarHeight,
+            //   width: bottomNavBarHeight,
+            //   child: InkWell(
+            //       onTap: () {
+            //         touchGenerations!.fire();
+            //       },
+            //       child: RiveAnimation.asset(
+            //         'assets/rive/generations_navicon.riv',
+            //       )),
+            // ),
+            // SizedBox(
+            //   height: bottomNavBarHeight,
+            //   width: bottomNavBarHeight,
+            //   // onTap: () => touchGenerations!.value = true,
+            //   child: RiveAnimation.asset(
+            //     'assets/rive/regions_navicon.riv',
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: bottomNavBarHeight,
+            //   width: bottomNavBarHeight,
+            //   // onTap: () => touchGenerations!.value = true,
+            //   child: RiveAnimation.asset(
+            //     'assets/rive/items_navicon.riv',
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: bottomNavBarHeight,
+            //   width: bottomNavBarHeight,
+            //   // onTap: () => touchGenerations!.value = true,
+            //   child: RiveAnimation.asset(
+            //     'assets/rive/menu_navicon.riv',
+            //   ),
+            // ),
           ],
         ));
   }
