@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterdex/app.dart';
 import 'package:flutterdex/cubits/connection/has_connection_cubit.dart';
-import 'package:flutterdex/repository/has_connection_repository.dart';
+import 'package:flutterdex/repositories/has_connection_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

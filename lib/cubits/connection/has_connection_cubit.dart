@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutterdex/cubits/connection/has_connection_state.dart';
-import 'package:flutterdex/repository/has_connection_repository.dart';
+import 'package:flutterdex/repositories/has_connection_repository.dart';
 
 class HasConnectionCubit extends Cubit<HasConnectionState> {
   final HasConnectionRepository connectionRepository;
