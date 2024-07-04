@@ -13,8 +13,6 @@ class HasConnectionCubit extends Cubit<HasConnectionState> {
     bool connected = await connectionRepository.testConnection();
     if (connected) {
       print("- Device connected -");
-      print("Waiting 3 seconds to show splas...");
-      await Future.delayed(const Duration(seconds: 3));
       emit(IsConnected());
     } else {
       emit(IsNotConnected());
