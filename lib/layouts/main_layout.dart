@@ -7,7 +7,6 @@ import 'package:flutterdex/screens/error.dart';
 import 'package:flutterdex/screens/generations.dart';
 import 'package:flutterdex/widgets/app_bar.dart';
 import 'package:flutterdex/widgets/bottom_navigaton_appbar.dart';
-import 'package:rive/rive.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -33,12 +32,27 @@ class _MainLayoutState extends State<MainLayout> {
       child: Scaffold(
         backgroundColor: Color(0xFFF8F8F8), // bgColor
         extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(100), child: PokedexAppBar()),
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(100), child: PokedexAppBar()),
         body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             children: [
               const SizedBox(height: 100),
+              BlocBuilder<NavigationCubit, NavigationState>(
+                  builder: (context, state) {
+                return switch (state) {
+                  NavigationStateInitial() ||
+                  NavigationStateLoading() =>
+                    const Center(child: CircularProgressIndicator()),
+                  NavigationStateGenerations() => GenerationsScreen(),
+                  // NavigationStateRegions() => RegionsScreen(),
+                  // NavigationStateItems() => ItemsScreen(),
+                  _ => const ErrorScreen(
+                      message:
+                          "The page you are looking for\ndoes not exist in this app")
+                };
+              })
             ],
           ),
         ),
