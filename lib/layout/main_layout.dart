@@ -19,12 +19,12 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
+    super.initState();
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color(0xFFDC0A2D), // primaryColor
       systemNavigationBarColor: Color(0xFF212121), // darkColor
       systemNavigationBarIconBrightness: Brightness.light,
     ));
-    super.initState();
   }
 
   @override
@@ -33,25 +33,12 @@ class _MainLayoutState extends State<MainLayout> {
       child: Scaffold(
         backgroundColor: Color(0xFFF8F8F8), // bgColor
         extendBodyBehindAppBar: true,
-        appBar: PokedexAppBar(),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(100), child: PokedexAppBar()),
         body: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 100),
-              Container(
-                height: 300,
-                color: Colors.purple,
-              ),
-              Container(height: 400, color: Colors.pink),
-              Container(height: 100, color: Colors.blue),
-              Container(height: 600, color: Colors.green),
-              Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.purple,
-                ),
-              ),
             ],
           ),
         ),

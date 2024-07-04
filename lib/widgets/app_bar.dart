@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class PokedexAppBar extends StatelessWidget implements PreferredSizeWidget {
+class PokedexAppBar extends StatelessWidget {
   const PokedexAppBar({super.key});
 
   @override
@@ -17,8 +17,4 @@ class PokedexAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     ]);
   }
-
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(100);
 }
