@@ -1,94 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:rive/rive.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterdex/cubits/navigation/navigation_cubit.dart';
+import 'package:flutterdex/cubits/navigation/navigation_state.dart';
+import 'package:flutterdex/models/navigation_item.dart';
+import 'package:flutterdex/screens/generations.dart';
 
-class PokedexBottomAppBar extends StatefulWidget {
+class PokedexBottomAppBar extends StatelessWidget {
   const PokedexBottomAppBar({super.key});
 
   @override
-  State<PokedexBottomAppBar> createState() => _PokedexBottomAppBarState();
-}
-
-class _PokedexBottomAppBarState extends State<PokedexBottomAppBar> {
-  Artboard? generations;
-  Artboard? regions;
-  Artboard? items;
-  Artboard? menu;
-  SMITrigger? touchGenerations;
-  SMITrigger? touchRegions;
-  SMITrigger? touchItems;
-  SMITrigger? touchMenu;
-
-  @override
-  void initState() {
-    super.initState();
-    // rootBundle.load('assets/rive/generations_navicon.riv').then(
-    //   (data) async {
-    //     try {
-    //       final file = RiveFile.import(data);
-    //       final artboard = file.mainArtboard;
-    //       var controller =
-    //           StateMachineController.fromArtboard(artboard, 'generationsSM');
-    //       if (controller != null) {
-    //         artboard.addController(controller);
-    //         touchGenerations = controller.findSMI('touch');
-    //       }
-    //       setState(() => generations = artboard);
-    //     } catch (e) {
-    //       print(e);
-    //     }
-    //   },
-    // );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    const double bottomNavBarHeight = 70;
     return Container(
-        height: bottomNavBarHeight,
-        width: 200,
-        decoration: const BoxDecoration(
-          color: Color(0xFF212121),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // SizedBox(
-            //   height: bottomNavBarHeight,
-            //   width: bottomNavBarHeight,
-            //   child: InkWell(
-            //       onTap: () {
-            //         touchGenerations!.fire();
-            //       },
-            //       child: RiveAnimation.asset(
-            //         'assets/rive/generations_navicon.riv',
-            //       )),
-            // ),
-            // SizedBox(
-            //   height: bottomNavBarHeight,
-            //   width: bottomNavBarHeight,
-            //   // onTap: () => touchGenerations!.value = true,
-            //   child: RiveAnimation.asset(
-            //     'assets/rive/regions_navicon.riv',
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: bottomNavBarHeight,
-            //   width: bottomNavBarHeight,
-            //   // onTap: () => touchGenerations!.value = true,
-            //   child: RiveAnimation.asset(
-            //     'assets/rive/items_navicon.riv',
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: bottomNavBarHeight,
-            //   width: bottomNavBarHeight,
-            //   // onTap: () => touchGenerations!.value = true,
-            //   child: RiveAnimation.asset(
-            //     'assets/rive/menu_navicon.riv',
-            //   ),
-            // ),
-          ],
+        height: 75,
+        color: Color(0xFF212121),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: BlocBuilder<NavigationCubit, NavigationState>(
+              builder: (context, state) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: navigationItems.map((item) {
+                ScreenEnum? currentScreen;
+                if (state is NavigationStateGenerations) {
+                  currentScreen = ScreenEnum.generations;
+                } else if (state is NavigationStateRegions) {
+                  currentScreen = ScreenEnum.regions;
+                } else if (state is NavigationStateItems) {
+                  currentScreen = ScreenEnum.items;
+                } else {
+                  print('ERROR ON NAVIGATION APP BAR CURRENT SCREEN');
+                  context.read<NavigationCubit>().emit(NavigationStateError(
+                      error: 'Something went wrong loading the data'));
+                }
+                final bool isCurrentPage =
+                    item.screen != null && item.screen == currentScreen;
+                return SizedBox(
+                    height: 60,
+                    width: 75,
+                    child: InkWell(
+                        onTap: () {
+                          if (item.onTap != null) {
+                            item.onTap!();
+                          } else if (item.screen != null) {
+                            context
+                                .read<NavigationCubit>()
+                                .navigateTo(item.screen!);
+                          }
+                        },
+                        child: Opacity(
+                          opacity: isCurrentPage ? 1 : 0.4,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              Visibility(
+                                visible: isCurrentPage,
+                                child: Positioned(
+                                  top: 0,
+                                  child: Container(
+                                    height: 3,
+                                    width: 20,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFFE0E0E0),
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                  ),
+                                ),
+                              ),
+                              Wrap(
+                                direction: Axis.vertical,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: SvgPicture.asset(item.iconPath)),
+                                  Text(
+                                    item.name,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        color: Color(0xFFE0E0E0), fontSize: 12),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )));
+              }).toList(),
+            );
+          }),
         ));
   }
 }
