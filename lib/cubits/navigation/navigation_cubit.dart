@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterdex/cubits/navigation/navigation_state.dart';
 import 'package:flutterdex/models/generation.dart';
+import 'package:flutterdex/models/navigation_item.dart';
+import 'package:flutterdex/repositories/generations_repository.dart';
 import 'package:flutterdex/repositories/navigation_repository.dart';
 
 class NavigationCubit extends Cubit<NavigationState> {
@@ -11,22 +13,24 @@ class NavigationCubit extends Cubit<NavigationState> {
 
   void fetchInitialData() {
     emit(NavigationStateLoading());
-    goToGenerations();
+    // Maybe not needed
+    //* TEMPORARY
+    emit(NavigationStateGenerations(generationsList: []));
+    // goToGenerations();
   }
 
   void goToGenerations() async {
     print("== Go to Generations Screen ==");
-    List<dynamic> generationsListData =
-        await navigationRepository.getAllGenerations();
-    if (generationsListData.isEmpty)
+    GenerationRepository generationRepository = GenerationRepository();
+    List<Generation?> generationsListData = []; // TEMPORARY
+    /* List<Generation?> generationsListData =
+        await generationRepository.getAllGenerations();
+    if (generationsListData.isEmpty) {
       emit(NavigationStateError(
           error: "An error occurred while fetching the data"));
-
-    List<dynamic> gen = generationsListData.map((element) {
-      int generationId = generationsListData.indexOf(element) + 1;
-      navigationRepository.getGenerationData(generationId);
-    }).toList();
-    emit(NavigationStateGenerations());
+      return;
+    } */
+    emit(NavigationStateGenerations(generationsList: generationsListData));
   }
 
   void goToRegions() {
@@ -39,5 +43,19 @@ class NavigationCubit extends Cubit<NavigationState> {
     print("== Go to Items Screen ==");
 
     emit(NavigationStateItems());
+  }
+
+  void navigateTo(ScreenEnum screen) {
+    switch (screen) {
+      case ScreenEnum.generations:
+        goToGenerations();
+        break;
+      case ScreenEnum.regions:
+        goToRegions();
+        break;
+      case ScreenEnum.items:
+        goToItems();
+        break;
+    }
   }
 }
