@@ -56,6 +56,9 @@ class NavigationCubit extends Cubit<NavigationState> {
       case ScreenEnum.items:
         goToItems();
         break;
+      case ScreenEnum.menu:
+        print('print from cubit flie for menu');
+        break;
     }
   }
 }
