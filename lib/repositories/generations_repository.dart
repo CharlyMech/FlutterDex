@@ -5,24 +5,36 @@ import 'package:flutterdex/models/generation.dart';
 import 'package:flutterdex/models/pokemon.dart';
 import 'package:flutterdex/utils/dio_client.dart';
 
-class NavigationRepository {
+class GenerationRepository {
   late final DioClient _client;
+  final String _baseUrl = '/generation';
 
-  NavigationRepository() {
+  GenerationRepository() {
     _client = DioClient();
   }
 
-  Future<List<dynamic>> getAllGenerations() async {
+  Future<List<Generation?>> getAllGenerations() async {
     try {
       Response<dynamic> generationsListResponse =
-          await _client.dio.get('/generation');
-      if (generationsListResponse.statusCode == 200) {
-        return (generationsListResponse.data
-            as Map<String, dynamic>)['results'];
-      } else {
+          await _client.dio.get(_baseUrl);
+      if (generationsListResponse.statusCode != 200) {
         print('No data returned on getGenerationsData');
         throw Exception('No data returned!');
       }
+      List<dynamic> generationsListData =
+          (generationsListResponse.data as Map<String, dynamic>)['results'];
+      List<Generation?> generationsList =
+          await Future.wait(generationsListData.map((element) {
+        String generationIdUrlString = element['url'].replaceAll('/', '');
+        int generationId =
+            int.parse(generationIdUrlString[generationIdUrlString.length - 1]);
+        print("== == == == ==");
+        print(element);
+        print('$generationId + ${generationId.runtimeType}');
+        print(generationIdUrlString);
+        return getGenerationData(generationId);
+      }));
+      return generationsList;
     } on DioException catch (dioe) {
       print("== DioException ==");
       print(dioe);
